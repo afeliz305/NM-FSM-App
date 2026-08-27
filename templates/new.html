@@ -9,7 +9,16 @@
 </head>
 <body class="bg-light">
     <div class="container mt-5">
+        <div class="text-end mb-2">
+            <small class="text-muted">User ID: 3316199</small>
+        </div>
         <h1 class="text-center mb-4">Add New Student</h1>
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
         <form method="POST" class="p-4 border rounded bg-white shadow-sm">
             <div class="mb-3">
                 <label for="name" class="form-label">Name:</label>
@@ -26,6 +35,10 @@
             <div class="mb-3">
                 <label for="pin" class="form-label">Pin:</label>
                 <input type="text" id="pin" name="pin" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Phone Number:</label>
+                <input type="tel" id="phone_number" name="phone_number" class="form-control" placeholder="e.g. 555-123-4567">
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-success">Submit</button>
