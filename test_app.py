@@ -12,6 +12,7 @@ class TestFlaskStudentsApp(unittest.TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
+        self.assertIn("3316199", html)
         self.assertIn("All Students", html)
         self.assertIn("<th>Phone Number</th>", html)
         # Check that existing students and their phone numbers are displayed
@@ -28,6 +29,7 @@ class TestFlaskStudentsApp(unittest.TestCase):
         response = self.client.get('/new')
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
+        self.assertIn("3316199", html)
         self.assertIn("Add New Student", html)
         self.assertIn('name="phone_number"', html)
 
