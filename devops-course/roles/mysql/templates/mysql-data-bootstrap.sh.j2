@@ -1,0 +1,20 @@
+#!/bin/bash
+set -euo pipefail
+
+DATADIR={{ mysql_datadir }}
+
+# Ensure datadir exists
+if [ ! -d " ]; then
+ mkdir -p 
+fi
+
+# Ensure correct ownership and permissions for MySQL
+chown -R mysql:mysql 
+chmod 750 
+
+# Ensure socket parent directory exists
+if [ ! -d /var/lib/mysql ]; then
+ mkdir -p /var/lib/mysql
+fi
+chown -R mysql:mysql /var/lib/mysql
+chmod 755 /var/lib/mysql
