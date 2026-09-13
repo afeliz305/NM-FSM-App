@@ -1,0 +1,13 @@
+[Unit]
+Description=MySQL Data Directory Bootstrap
+Before=mysqld.service
+Wants=local-fs.target
+After=local-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/mysql-data-bootstrap.sh
+
+[Install]
+WantedBy=multi-user.target

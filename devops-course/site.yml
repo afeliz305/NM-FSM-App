@@ -1,0 +1,6 @@
+---
+- name: Install and Configure MySQL on Database Servers
+  hosts: dbservers
+  become: true
+  roles:
+    - mysql
