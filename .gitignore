@@ -1,4 +1,4 @@
-﻿venv/
+venv/
 .venv/
 __pycache__/
 *.py[cod]
@@ -14,3 +14,6 @@ build/
 *.egg-info/
 .idea/
 .vscode/
+.ansible_vault_pass
+*.vault_pass
+.vault_pass
