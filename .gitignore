@@ -16,3 +16,4 @@ build/
 .vscode/
 .ansible_vault_pass
 *.vault_pass
+.vault_pass

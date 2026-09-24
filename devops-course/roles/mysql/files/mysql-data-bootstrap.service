@@ -5,7 +5,7 @@ Before=mysqld.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/sbin/mysql-data-bootstrap.sh
+ExecStart=/bin/bash /usr/local/sbin/mysql-data-bootstrap.sh
 TimeoutStartSec=180
 [Install]
 WantedBy=multi-user.target
