@@ -17,3 +17,9 @@ build/
 .ansible_vault_pass
 *.vault_pass
 .vault_pass
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+scale_lambda-*.zip
+*.bin
