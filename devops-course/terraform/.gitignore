@@ -10,3 +10,4 @@ crash.*.log
 
 # Generated lambda archives
 scale_lambda-*.zip
+*.bin

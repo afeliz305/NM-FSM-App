@@ -22,3 +22,4 @@ build/
 *.tfstate.*
 *.tfplan
 scale_lambda-*.zip
+*.bin
