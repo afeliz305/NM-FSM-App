@@ -20,12 +20,20 @@ class Students(db.Model):
     pin = db.Column(db.String(10))
     phone_number = db.Column(db.String(20))
 
-    def __init__(self, name, city, addr, pin, phone_number=None):
+    def __init__(self, name, city, addr, pin, phone_number=None, phone=None):
         self.name = name
         self.city = city
         self.addr = addr
         self.pin = pin
-        self.phone_number = phone_number
+        self.phone_number = phone if phone is not None else phone_number
+
+    @property
+    def phone(self):
+        return self.phone_number
+
+    @phone.setter
+    def phone(self, value):
+        self.phone_number = value
 
 def init_db():
     with app.app_context():
@@ -69,7 +77,7 @@ def new():
                 request.form['city'],
                 request.form['addr'],
                 request.form.get('pin'),
-                request.form.get('phone_number')
+                request.form.get('phone_number') or request.form.get('phone')
             )
             db.session.add(student)
             db.session.commit()
