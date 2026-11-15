@@ -22,7 +22,7 @@ def test_add_student_workflow(page: Page):
     page.fill("input[name='city']",  "Miami")
     page.fill("input[name='addr']",  "123 Main St")
     page.fill("input[name='pin']",   "33101")
-    page.fill("input[name='phone']", "305-555-9999")
+    page.fill("input[name='phone'], input[name='phone_number']", "305-555-9999")
     page.click("button[type='submit']")
     page.wait_for_url(STAGING_URL + "/")
 
@@ -36,6 +36,6 @@ def test_missing_name_stays_on_form(page: Page):
     page.goto(f"{STAGING_URL}/new")
     page.fill("input[name='city']",  "Miami")
     page.fill("input[name='addr']",  "1 Main St")
-    page.fill("input[name='phone']", "305-555-0000")
+    page.fill("input[name='phone'], input[name='phone_number']", "305-555-0000")
     page.click("button[type='submit']")
     assert "/new" in page.url
