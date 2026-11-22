@@ -56,6 +56,9 @@ def init_db():
             if 'phone_number' not in columns:
                 cur.execute("ALTER TABLE students ADD COLUMN phone_number VARCHAR(20)")
                 conn.commit()
+            if 'major' not in columns:
+                cur.execute("ALTER TABLE students ADD COLUMN major VARCHAR(50)")
+                conn.commit()
             # Assign random phone numbers to existing records with null/empty phone numbers
             cur.execute("SELECT student_id, phone_number FROM students WHERE phone_number IS NULL OR phone_number = ''")
             rows = cur.fetchall()
