@@ -28,6 +28,9 @@
                     <th>Address</th>
                     <th>Pin</th>
                     <th>Phone Number</th>
+                    {% if show_major %}
+                    <th>Major</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -39,6 +42,9 @@
                     <td>{{ student.addr }}</td>
                     <td>{{ student.pin }}</td>
                     <td>{{ student.phone_number }}</td>
+                    {% if show_major %}
+                    <td>{{ student.major or '' }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

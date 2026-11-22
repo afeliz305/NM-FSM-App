@@ -12,6 +12,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 app.config['SECRET_KEY'] = "random string"
 db = SQLAlchemy(app)
 
+def major_enabled():
+    """Reads ENABLE_MAJOR_FIELD at request time so runtime and tests can toggle it."""
+    return os.environ.get("ENABLE_MAJOR_FIELD", "false").lower() in ("true", "1", "yes")
+
 class Students(db.Model):
     id = db.Column('student_id', db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -19,13 +23,15 @@ class Students(db.Model):
     addr = db.Column(db.String(200))
     pin = db.Column(db.String(10))
     phone_number = db.Column(db.String(20))
+    major = db.Column(db.String(50), nullable=True)
 
-    def __init__(self, name, city, addr, pin, phone_number=None, phone=None):
+    def __init__(self, name, city, addr, pin, phone_number=None, phone=None, major=None):
         self.name = name
         self.city = city
         self.addr = addr
         self.pin = pin
         self.phone_number = phone if phone is not None else phone_number
+        self.major = major
 
     @property
     def phone(self):
@@ -50,6 +56,9 @@ def init_db():
             if 'phone_number' not in columns:
                 cur.execute("ALTER TABLE students ADD COLUMN phone_number VARCHAR(20)")
                 conn.commit()
+            if 'major' not in columns:
+                cur.execute("ALTER TABLE students ADD COLUMN major VARCHAR(50)")
+                conn.commit()
             # Assign random phone numbers to existing records with null/empty phone numbers
             cur.execute("SELECT student_id, phone_number FROM students WHERE phone_number IS NULL OR phone_number = ''")
             rows = cur.fetchall()
@@ -64,26 +73,29 @@ with app.app_context():
 
 @app.route('/')
 def show_all():
-    return render_template('show_all.html', students=Students.query.all())
+    return render_template('show_all.html', students=Students.query.all(), show_major=major_enabled())
 
 @app.route('/new', methods=['GET', 'POST'])
 def new():
+    show_major = major_enabled()
     if request.method == 'POST':
         if not request.form['name'] or not request.form['city'] or not request.form['addr']:
             flash('Please enter all the fields', 'error')
         else:
+            major_val = request.form.get('major') if show_major else None
             student = Students(
                 request.form['name'],
                 request.form['city'],
                 request.form['addr'],
                 request.form.get('pin'),
-                request.form.get('phone_number') or request.form.get('phone')
+                request.form.get('phone_number') or request.form.get('phone'),
+                major=major_val
             )
             db.session.add(student)
             db.session.commit()
             flash('Record was successfully added')
             return redirect(url_for('show_all'))
-    return render_template('new.html')
+    return render_template('new.html', show_major=show_major)
 
 if __name__ == '__main__':
     init_db()
