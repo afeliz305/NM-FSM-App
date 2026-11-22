@@ -40,3 +40,40 @@ def test_required_fields(client, missing):
     r = client.post("/new", data=data)
     assert r.status_code == 200
     assert Students.query.count() == before
+
+@pytest.mark.parametrize("flag", ["true", "false"])
+def test_form_major_field(client, monkeypatch, flag):
+    """Major input appears on /new only when ENABLE_MAJOR_FIELD is true."""
+    monkeypatch.setenv("ENABLE_MAJOR_FIELD", flag)
+    r = client.get("/new")
+    shown = b'name="major"' in r.data
+    assert shown == (flag == "true")
+
+@pytest.mark.parametrize("flag", ["true", "false"])
+def test_list_major_column(client, monkeypatch, flag):
+    """Major column header appears on / only when ENABLE_MAJOR_FIELD is true."""
+    monkeypatch.setenv("ENABLE_MAJOR_FIELD", flag)
+    r = client.get("/")
+    shown = b'<th>Major</th>' in r.data
+    assert shown == (flag == "true")
+
+@pytest.mark.parametrize("flag", ["true", "false"])
+def test_post_major_field_persistence(client, monkeypatch, flag):
+    """Major is stored when flag is true; ignored (None) when flag is false."""
+    monkeypatch.setenv("ENABLE_MAJOR_FIELD", flag)
+    name = f"Test Major {flag}"
+    r = client.post("/new", data={
+        "name": name,
+        "city": "Miami",
+        "addr": "123 Main St",
+        "pin": "33101",
+        "phone": "305-555-1234",
+        "major": "Computer Science"
+    }, follow_redirects=True)
+    assert r.status_code == 200
+    student = Students.query.filter_by(name=name).first()
+    assert student is not None
+    if flag == "true":
+        assert student.major == "Computer Science"
+    else:
+        assert student.major is None
