@@ -62,6 +62,6 @@ variable "enable_major_field" {
   type    = map(string)
   default = {
     staging    = "true"
-    production = "false"
+    production = "true"
   }
 }
